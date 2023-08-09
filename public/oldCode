@@ -1,0 +1,49 @@
+import React ,{useState, useEffect} from "react"
+import Boxes from "./Boxes"
+import boxData from "./boxData"
+
+const Game = () => {
+    const [square, setSquare] = useState(boxData)
+    const toggle = (id) => {
+        setSquare(prevSq => {
+            return prevSq.map(item => {
+                return item.id === id ? {...item, on: !item.on} : item
+            }
+            )
+        })
+        //console.log(square[id].on)
+    }
+    //let num
+    let sqElements = square.map((box) => {
+        // useEffect(() => {
+        //     box.num = Math.floor(Math.random() * 6)
+        // } , [])
+        const num = !box.on ? Math.floor(Math.random() * 6): box.num;
+        useEffect(() => setSquare(prevSq => {
+            return prevSq.map(item => {
+                return !item.on ? {...item, num: Math.floor(Math.random())} : item
+            }
+            )
+        }), [box.on])
+        box.num = num;
+        return <Boxes key={box.id} id={box.id} 
+        number={box.num} on={box.on} toggle={toggle}/>
+    })
+
+    // const sqElements = square.map(box => {
+    //     return <Boxes key={box.id} id={box.id} number={box.num} on={box.on} toggle={toggle}/>
+    // })
+
+    return (
+        <div>
+            <div className="dice--container">
+                {sqElements}
+            </div>
+            <div className="button--container" >
+                    <button className="button-19">Roll</button>
+            </div>
+        </div>
+    ) 
+}
+
+export default Game;
